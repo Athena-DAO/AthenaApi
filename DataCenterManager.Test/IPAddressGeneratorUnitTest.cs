@@ -65,5 +65,7 @@ namespace DataCenterManager.Test
 
             Assert.AreEqual(16777216, count);
         }
+
+        
     }
 }

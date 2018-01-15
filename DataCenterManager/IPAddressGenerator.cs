@@ -50,7 +50,6 @@ namespace DataCenterManager
 
                 yield return currentIPAddress;
             }
-
         }
 
 
