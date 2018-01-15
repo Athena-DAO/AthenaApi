@@ -20,6 +20,11 @@ namespace DataCenterManager
             }
             set
             {
+                if(value != _IPAddressSeries)
+                {
+                    currentIPAddress = null;
+                }
+
                 _IPAddressSeries = value;
             }
         }
