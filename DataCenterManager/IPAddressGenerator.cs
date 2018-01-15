@@ -39,13 +39,15 @@ namespace DataCenterManager
                             UpdateCurrentIPAddressInOneSevenTwo();
                             break;
                         case IPAddressSeries.OneZero:
-                            throw new NotImplementedException();
+                            UpdateCurrentIPAddressInOneZero();
                             break;
                     }
-                }catch(NoMoreIPAddressException)
+                }
+                catch (NoMoreIPAddressException)
                 {
                     break;
                 }
+
                 yield return currentIPAddress;
             }
 
@@ -54,7 +56,7 @@ namespace DataCenterManager
 
         private void UpdateCurrentIPAddressInOneNinerTwo()
         {
-            if(currentIPAddress == null)
+            if (currentIPAddress == null)
             {
                 currentIPAddress = new IPAddress
                 {
@@ -66,16 +68,16 @@ namespace DataCenterManager
             }
             else
             {
-                if(currentIPAddress.FourthOctet == 255 && currentIPAddress.ThridOctet == 255)
+                if (currentIPAddress.FourthOctet == 255 && currentIPAddress.ThridOctet == 255)
                 {
                     throw new NoMoreIPAddressException();
                 }
-                else if(currentIPAddress.FourthOctet == 255 && currentIPAddress.ThridOctet != 255)
+                else if (currentIPAddress.FourthOctet == 255 && currentIPAddress.ThridOctet != 255)
                 {
                     currentIPAddress.FourthOctet = 0;
                     currentIPAddress.ThridOctet++;
                 }
-                else if(currentIPAddress.FourthOctet != 255)
+                else if (currentIPAddress.FourthOctet != 255)
                 {
                     currentIPAddress.FourthOctet++;
                 }
@@ -84,7 +86,7 @@ namespace DataCenterManager
 
         private void UpdateCurrentIPAddressInOneSevenTwo()
         {
-            if(currentIPAddress == null)
+            if (currentIPAddress == null)
             {
                 currentIPAddress = new IPAddress
                 {
@@ -96,22 +98,59 @@ namespace DataCenterManager
             }
             else
             {
-                if(currentIPAddress.SecondOctet == 31 && currentIPAddress.ThridOctet == 255 
+                if (currentIPAddress.SecondOctet == 31 && currentIPAddress.ThridOctet == 255
                     && currentIPAddress.FourthOctet == 255)
                 {
                     throw new NoMoreIPAddressException();
                 }
-                else if(currentIPAddress.ThridOctet == 255 && currentIPAddress.FourthOctet == 255)
+                else if (currentIPAddress.ThridOctet == 255 && currentIPAddress.FourthOctet == 255)
                 {
                     currentIPAddress.SecondOctet++;
                     currentIPAddress.ThridOctet = 0;
                     currentIPAddress.FourthOctet = 0;
                 }
-                else if(currentIPAddress.FourthOctet == 255)
+                else if (currentIPAddress.FourthOctet == 255)
                 {
                     currentIPAddress.ThridOctet++;
                     currentIPAddress.FourthOctet = 0;
-                } 
+                }
+                else
+                {
+                    currentIPAddress.FourthOctet++;
+                }
+            }
+        }
+
+        private void UpdateCurrentIPAddressInOneZero()
+        {
+            if (currentIPAddress == null)
+            {
+                currentIPAddress = new IPAddress
+                {
+                    FirstOctet = 10,
+                    SecondOctet = 0,
+                    ThridOctet = 0,
+                    FourthOctet = 0
+                };
+            }
+            else
+            {
+                if (currentIPAddress.SecondOctet == 255 && currentIPAddress.ThridOctet == 255
+                    && currentIPAddress.FourthOctet == 255)
+                {
+                    throw new NoMoreIPAddressException();
+                }
+                else if (currentIPAddress.ThridOctet == 255 && currentIPAddress.FourthOctet == 255)
+                {
+                    currentIPAddress.SecondOctet++;
+                    currentIPAddress.ThridOctet = 0;
+                    currentIPAddress.FourthOctet = 0;
+                }
+                else if (currentIPAddress.FourthOctet == 255)
+                {
+                    currentIPAddress.ThridOctet++;
+                    currentIPAddress.FourthOctet = 0;
+                }
                 else
                 {
                     currentIPAddress.FourthOctet++;
