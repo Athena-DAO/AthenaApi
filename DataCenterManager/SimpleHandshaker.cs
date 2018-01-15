@@ -10,8 +10,7 @@ namespace DataCenterManager
         public void PerformHandshake(Data.IPAddress iPAddress)
         {
             byte[] bytes = new byte[1024];
-            IPAddress myIPAddress = IPAddress.Parse(iPAddress.FirstOctet + "." + iPAddress.SecondOctet
-                + "." + iPAddress.ThridOctet + "." + iPAddress.FourthOctet);
+            IPAddress myIPAddress = IPAddress.Parse(iPAddress.ToString());
             IPEndPoint localEndPoint = new IPEndPoint(myIPAddress, 5000);
             Socket socket = new Socket(myIPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
