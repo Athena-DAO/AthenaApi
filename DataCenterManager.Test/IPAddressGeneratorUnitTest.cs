@@ -7,7 +7,7 @@ using System.Text;
 namespace DataCenterManager.Test
 {
     [TestClass]
-    class IPAddressGeneratorUnitTest
+    public class IPAddressGeneratorUnitTest
     {
         public readonly IIPAddressGenerator _ipAddressGenerator;
 
@@ -16,6 +16,12 @@ namespace DataCenterManager.Test
             _ipAddressGenerator = new IPAddressGenerator();
         }
 
-        
+        [TestMethod]
+        public void TestGetSetAddressSeries()
+        {
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneNinerTwo;
+
+            Assert.AreEqual(_ipAddressGenerator.IPAddressSeries, Data.IPAddressSeries.OneNinerTwo);
+        }
     }
 }
