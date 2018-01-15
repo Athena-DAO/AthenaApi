@@ -2,7 +2,7 @@
 
 namespace DataCenterManager.Exceptions
 {
-    class NoAddressSeriesSetException : Exception
+    public class NoAddressSeriesSetException : Exception
     {
         public NoAddressSeriesSetException()
         {

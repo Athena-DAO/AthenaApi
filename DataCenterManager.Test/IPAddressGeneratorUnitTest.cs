@@ -66,6 +66,12 @@ namespace DataCenterManager.Test
             Assert.AreEqual(16777216, count);
         }
 
-        
+        [TestMethod]
+        public void TestNoIPAddressSeriesSet()
+        {
+            IPAddressGenerator ipAddressGenerator = new IPAddressGenerator();
+
+            Assert.ThrowsException<Exceptions.NoAddressSeriesSetException>(() => ipAddressGenerator.GetIPAddresses());
+        }
     }
 }
