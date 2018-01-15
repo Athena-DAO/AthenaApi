@@ -2,6 +2,6 @@
 {
     public enum IPAddressSeries
     {
-        OneNinerOne, OneSevenTwo, OneZero
+        OneNinerTwo, OneSevenTwo, OneZero
     }
 }

@@ -6,7 +6,7 @@ using DataCenterManager.Data;
 
 namespace DataCenterManager
 {
-    class IPAddressGenerator : IIPAddressGenerator
+    public class IPAddressGenerator : IIPAddressGenerator
     {
         public IPAddressSeries IPAddressSeries { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
