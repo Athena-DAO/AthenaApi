@@ -1,5 +1,6 @@
 ﻿using DataCenterManager.Constants;
 using DataCenterManager.Interfaces;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,14 +9,14 @@ namespace DataCenterManager
 {
     public class SimpleHandshaker : IHandshake
     {
-        public int PerformHandshake(Data.IPAddress iPAddress)
+        public int PerformHandshake(Data.IPAddress iPAddress, int timeout = -1)
         {
             byte[] bytes = new byte[1024];
             IPAddress myIPAddress = IPAddress.Parse(iPAddress.ToString());
             IPEndPoint localEndPoint = new IPEndPoint(myIPAddress, PortNumbers.HANDSHAKE_PORT);
             Socket socket = new Socket(myIPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-            PerformStageOne(localEndPoint, socket);
+            PerformStageOne(localEndPoint, socket, timeout);
 
             int numberOfContainers = 0;
             try
@@ -54,11 +55,22 @@ namespace DataCenterManager
             return numberOfContainer;
         }
 
-        private static void PerformStageOne(IPEndPoint localEndPoint, Socket socket)
+        private static void PerformStageOne(IPEndPoint localEndPoint, Socket socket, int timeout)
         {
             try
             {
-                socket.Connect(localEndPoint);
+                IAsyncResult result = socket.BeginConnect(localEndPoint, null, null);
+
+                bool sucess = result.AsyncWaitHandle.WaitOne(timeout, true);
+                if(sucess)
+                {
+                    socket.EndConnect(result);
+                }
+                else
+                {
+                    socket.Close();
+                    throw new Exceptions.MachineNotAvailableException();
+                }
             }
             catch (SocketException)
             {
