@@ -4,6 +4,6 @@ namespace DataCenterManager.Interfaces
 {
     public interface IHandshake
     {
-        void PerformHandshake(IPAddress IPAddress);
+        int PerformHandshake(IPAddress IPAddress);
     }
 }

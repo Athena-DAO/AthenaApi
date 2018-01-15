@@ -8,7 +8,7 @@ namespace DataCenterManager
 {
     public class SimpleHandshaker : IHandshake
     {
-        public void PerformHandshake(Data.IPAddress iPAddress)
+        public int PerformHandshake(Data.IPAddress iPAddress)
         {
             byte[] bytes = new byte[1024];
             IPAddress myIPAddress = IPAddress.Parse(iPAddress.ToString());
@@ -17,9 +17,10 @@ namespace DataCenterManager
 
             PerformStageOne(localEndPoint, socket);
 
+            int numberOfContainers = 0;
             try
             {
-                int numberOfContainers = PerformStageTwo(bytes, socket);
+                numberOfContainers = PerformStageTwo(bytes, socket);
             }
             catch (Exceptions.RougeMachineException e)
             {
@@ -32,6 +33,8 @@ namespace DataCenterManager
 
             socket.Shutdown(SocketShutdown.Send);
             socket.Close();
+
+            return numberOfContainers;
         }
 
         private static void PerformStageThree(Socket socket)
