@@ -2,7 +2,7 @@
 
 namespace DataCenterManager.Interfaces
 {
-    interface IHandshake
+    public interface IHandshake
     {
         void PerformHandshake(IPAddress IPAddress);
     }
