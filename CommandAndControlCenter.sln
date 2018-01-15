@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCenterManager", "DataCenterManager\DataCenterManager.csproj", "{7F6BE66C-29B2-4A24-9317-50ECA2F8332D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCenterManager.Test", "DataCenterManager.Test\DataCenterManager.Test.csproj", "{EE10742E-2E84-4B6A-AA18-A51384A36598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7F6BE66C-29B2-4A24-9317-50ECA2F8332D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F6BE66C-29B2-4A24-9317-50ECA2F8332D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F6BE66C-29B2-4A24-9317-50ECA2F8332D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE10742E-2E84-4B6A-AA18-A51384A36598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE10742E-2E84-4B6A-AA18-A51384A36598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE10742E-2E84-4B6A-AA18-A51384A36598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE10742E-2E84-4B6A-AA18-A51384A36598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
