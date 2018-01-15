@@ -37,5 +37,19 @@ namespace DataCenterManager.Test
 
             Assert.AreEqual(65536, count);
         }
+
+        [TestMethod]
+        public void TestIPAddressCountInOneSevenTwo()
+        {
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneSevenTwo;
+
+            int count = 0;
+            foreach (var ipAddress in _ipAddressGenerator.GetIPAddresses())
+            {
+                count++;
+            }
+
+            Assert.AreEqual(1048576, count);
+        }
     }
 }
