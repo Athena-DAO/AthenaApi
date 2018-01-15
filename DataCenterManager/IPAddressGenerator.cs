@@ -8,7 +8,19 @@ namespace DataCenterManager
 {
     public class IPAddressGenerator : IIPAddressGenerator
     {
-        public IPAddressSeries IPAddressSeries { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private IPAddressSeries _IPAddressSeries;
+
+        public IPAddressSeries IPAddressSeries
+        {
+            get
+            {
+                return _IPAddressSeries;
+            }
+            set
+            {
+                _IPAddressSeries = value;
+            }
+        }
 
         public IEnumerable<IPAddress> GetIPAddresses()
         {
