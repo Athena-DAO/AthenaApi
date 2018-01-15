@@ -17,7 +17,16 @@ namespace DataCenterManager
 
             PerformStageOne(localEndPoint, socket, out byte[] message, out int bytesSent);
 
-            int numberOfContainers = PerformStageTwo(bytes, socket);
+            try
+            {
+                int numberOfContainers = PerformStageTwo(bytes, socket);
+            }
+            catch (Exceptions.RougeMachineException e)
+            {
+                socket.Shutdown(SocketShutdown.Send);
+                socket.Close();
+                throw e;
+            }
 
             PerformStageThree(socket, out message, out bytesSent);
 
@@ -34,7 +43,11 @@ namespace DataCenterManager
         private static int PerformStageTwo(byte[] bytes, Socket socket)
         {
             int bytesRecieved = socket.Receive(bytes);
-            int numberOfContainer = int.Parse(Encoding.ASCII.GetString(bytes, 0, bytesRecieved));
+            if (!int.TryParse(Encoding.ASCII.GetString(bytes, 0, bytesRecieved), out int numberOfContainer))
+            {
+                throw new Exceptions.RougeMachineException();
+            }
+
             return numberOfContainer;
         }
 
@@ -44,7 +57,7 @@ namespace DataCenterManager
             {
                 socket.Connect(localEndPoint);
             }
-            catch(SocketException)
+            catch (SocketException)
             {
                 throw new Exceptions.MachineNotAvailableException();
             }

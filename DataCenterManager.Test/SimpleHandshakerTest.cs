@@ -40,11 +40,11 @@ namespace DataCenterManager.Test
             Socket handler = socket.Accept();
             byte[] bytes = new byte[255];
             string data = null;
-            while(true)
+            while (true)
             {
                 int byteRecieved = handler.Receive(bytes);
                 data += Encoding.ASCII.GetString(bytes, 0, byteRecieved);
-                if(data.IndexOf("<EOF>") > -1)
+                if (data.IndexOf("<EOF>") > -1)
                 {
                     break;
                 }
@@ -84,6 +84,43 @@ namespace DataCenterManager.Test
                 ThridOctet = 0,
                 FourthOctet = 1
             });
+        }
+
+        [TestMethod]
+        public void TestRougeMachine()
+        {
+            IPAddress iPAddress = IPAddress.Parse("127.0.0.1");
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, 5000);
+            Socket socket = new Socket(iPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.Bind(localEndPoint);
+            socket.Listen(10);
+
+            new Thread(() =>
+            {
+                _handshaker.PerformHandshake(new Data.IPAddress
+                {
+                    FirstOctet = 127,
+                    SecondOctet = 0,
+                    ThridOctet = 0,
+                    FourthOctet = 1
+                });
+            }).Start();
+
+            Socket handler = socket.Accept();
+            byte[] bytes = new byte[1024];
+            string data = null;
+            int byteRecieved = handler.Receive(bytes);
+            data += Encoding.ASCII.GetString(bytes, 0, byteRecieved);
+
+            byte[] numberOfContainers = Encoding.ASCII.GetBytes("Hackerman");
+            handler.Send(numberOfContainers);
+
+            bytes = new byte[255];
+            byteRecieved = handler.Receive(bytes);
+            Assert.AreEqual(0, byteRecieved);
+
+            handler.Shutdown(SocketShutdown.Both);
+            handler.Close();
         }
     }
 }
