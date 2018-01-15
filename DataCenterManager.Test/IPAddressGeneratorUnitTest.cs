@@ -76,5 +76,29 @@ namespace DataCenterManager.Test
             {
             }
         }
+
+        [TestMethod]
+        public void ChangeIPAddressSeriesMidway()
+        {
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneNinerTwo;
+            foreach(var x in _ipAddressGenerator.GetIPAddresses())
+            {
+                Assert.AreEqual(192, x.FirstOctet);
+                Assert.AreEqual(168, x.SecondOctet);
+                Assert.AreEqual(0, x.ThridOctet);
+                Assert.AreEqual(0, x.FourthOctet);
+                break;
+            }
+
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneZero;
+            foreach (var item in _ipAddressGenerator.GetIPAddresses())
+            {
+                Assert.AreEqual(10, item.FirstOctet);
+                Assert.AreEqual(0, item.SecondOctet);
+                Assert.AreEqual(0, item.ThridOctet);
+                Assert.AreEqual(0, item.FourthOctet);
+                break;
+            }
+        }
     }
 }
