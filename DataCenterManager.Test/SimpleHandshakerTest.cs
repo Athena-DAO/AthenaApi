@@ -1,4 +1,5 @@
-﻿using DataCenterManager.Interfaces;
+﻿using DataCenterManager.Constants;
+using DataCenterManager.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using System.Net.Sockets;
@@ -90,7 +91,7 @@ namespace DataCenterManager.Test
         public void TestRougeMachine()
         {
             IPAddress iPAddress = IPAddress.Parse("127.0.0.1");
-            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, 5000);
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, PortNumbers.HANDSHAKE_PORT);
             Socket socket = new Socket(iPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(localEndPoint);
             socket.Listen(10);

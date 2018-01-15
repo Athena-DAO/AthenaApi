@@ -1,4 +1,5 @@
-﻿using DataCenterManager.Interfaces;
+﻿using DataCenterManager.Constants;
+using DataCenterManager.Interfaces;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,10 +12,10 @@ namespace DataCenterManager
         {
             byte[] bytes = new byte[1024];
             IPAddress myIPAddress = IPAddress.Parse(iPAddress.ToString());
-            IPEndPoint localEndPoint = new IPEndPoint(myIPAddress, 5000);
+            IPEndPoint localEndPoint = new IPEndPoint(myIPAddress, PortNumbers.HANDSHAKE_PORT);
             Socket socket = new Socket(myIPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-            PerformStageOne(localEndPoint, socket, out byte[] message, out int bytesSent);
+            PerformStageOne(localEndPoint, socket);
 
             try
             {
@@ -27,16 +28,16 @@ namespace DataCenterManager
                 throw e;
             }
 
-            PerformStageThree(socket, out message, out bytesSent);
+            PerformStageThree(socket);
 
             socket.Shutdown(SocketShutdown.Send);
             socket.Close();
         }
 
-        private static void PerformStageThree(Socket socket, out byte[] message, out int bytesSent)
+        private static void PerformStageThree(Socket socket)
         {
-            message = Encoding.ASCII.GetBytes("Bye<EOF>");
-            bytesSent = socket.Send(message);
+            byte[] message = Encoding.ASCII.GetBytes("Bye<EOF>");
+            socket.Send(message);
         }
 
         private static int PerformStageTwo(byte[] bytes, Socket socket)
@@ -50,7 +51,7 @@ namespace DataCenterManager
             return numberOfContainer;
         }
 
-        private static void PerformStageOne(IPEndPoint localEndPoint, Socket socket, out byte[] message, out int bytesSent)
+        private static void PerformStageOne(IPEndPoint localEndPoint, Socket socket)
         {
             try
             {
@@ -61,8 +62,8 @@ namespace DataCenterManager
                 throw new Exceptions.MachineNotAvailableException();
             }
 
-            message = Encoding.ASCII.GetBytes("Hello<EOF>");
-            bytesSent = socket.Send(message);
+            byte[] message = Encoding.ASCII.GetBytes("Hello<EOF>");
+            socket.Send(message);
         }
     }
 }
