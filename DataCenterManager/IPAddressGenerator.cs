@@ -36,7 +36,7 @@ namespace DataCenterManager
                             UpdateCurrentIPAddressInOneNinerTwo();
                             break;
                         case IPAddressSeries.OneSevenTwo:
-                            throw new NotImplementedException();
+                            UpdateCurrentIPAddressInOneSevenTwo();
                             break;
                         case IPAddressSeries.OneZero:
                             throw new NotImplementedException();
@@ -76,6 +76,43 @@ namespace DataCenterManager
                     currentIPAddress.ThridOctet++;
                 }
                 else if(currentIPAddress.FourthOctet != 255)
+                {
+                    currentIPAddress.FourthOctet++;
+                }
+            }
+        }
+
+        private void UpdateCurrentIPAddressInOneSevenTwo()
+        {
+            if(currentIPAddress == null)
+            {
+                currentIPAddress = new IPAddress
+                {
+                    FirstOctet = 172,
+                    SecondOctet = 16,
+                    ThridOctet = 0,
+                    FourthOctet = 0
+                };
+            }
+            else
+            {
+                if(currentIPAddress.SecondOctet == 31 && currentIPAddress.ThridOctet == 255 
+                    && currentIPAddress.FourthOctet == 255)
+                {
+                    throw new NoMoreIPAddressException();
+                }
+                else if(currentIPAddress.ThridOctet == 255 && currentIPAddress.FourthOctet == 255)
+                {
+                    currentIPAddress.SecondOctet++;
+                    currentIPAddress.ThridOctet = 0;
+                    currentIPAddress.FourthOctet = 0;
+                }
+                else if(currentIPAddress.FourthOctet == 255)
+                {
+                    currentIPAddress.ThridOctet++;
+                    currentIPAddress.FourthOctet = 0;
+                } 
+                else
                 {
                     currentIPAddress.FourthOctet++;
                 }
