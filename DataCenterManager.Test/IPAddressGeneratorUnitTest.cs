@@ -51,5 +51,19 @@ namespace DataCenterManager.Test
 
             Assert.AreEqual(1048576, count);
         }
+
+        [TestMethod]
+        public void TestIPAddressCountInOneZero()
+        {
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneZero;
+
+            int count = 0;
+            foreach (var ipAddress in _ipAddressGenerator.GetIPAddresses())
+            {
+                count++;
+            }
+
+            Assert.AreEqual(16777216, count);
+        }
     }
 }
