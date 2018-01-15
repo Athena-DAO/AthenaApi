@@ -41,6 +41,8 @@ namespace DataCenterManager
                         case IPAddressSeries.OneZero:
                             UpdateCurrentIPAddressInOneZero();
                             break;
+                        case IPAddressSeries.None:
+                            throw new NoAddressSeriesSetException();
                     }
                 }
                 catch (NoMoreIPAddressException)

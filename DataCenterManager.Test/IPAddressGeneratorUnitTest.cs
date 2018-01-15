@@ -67,11 +67,14 @@ namespace DataCenterManager.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exceptions.NoAddressSeriesSetException))]
         public void TestNoIPAddressSeriesSet()
         {
             IPAddressGenerator ipAddressGenerator = new IPAddressGenerator();
 
-            Assert.ThrowsException<Exceptions.NoAddressSeriesSetException>(() => ipAddressGenerator.GetIPAddresses());
+            foreach(var x in ipAddressGenerator.GetIPAddresses())
+            {
+            }
         }
     }
 }
