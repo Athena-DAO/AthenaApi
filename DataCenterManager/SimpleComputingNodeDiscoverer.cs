@@ -7,7 +7,7 @@ namespace DataCenterManager
 {
     public class SimpleComputingNodeDiscoverer : IComputingNodeDiscoverer
     {
-        public List<ComputingNode> GetAllComputingNodes(IHandshake handshake, IIPAddressGenerator addressGenerator)
+        public List<ComputingNode> GetAllComputingNodes(IHandshake handshake, IIPAddressGenerator addressGenerator, int timeout)
         {
             List<ComputingNode> nodes = new List<ComputingNode>();
 
@@ -16,7 +16,7 @@ namespace DataCenterManager
                 int numberOfContainers = 0;
                 try
                 {
-                    numberOfContainers = handshake.PerformHandshake(address, 1000);
+                    numberOfContainers = handshake.PerformHandshake(address, timeout);
                     nodes.Add(new ComputingNode
                     {
                         IPAddress = address.ToString(),

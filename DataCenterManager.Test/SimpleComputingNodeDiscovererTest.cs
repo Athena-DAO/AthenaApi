@@ -33,7 +33,7 @@ namespace DataCenterManager.Test
             }).Start();
 
             _addressGenerator.IPAddressSeries = Data.IPAddressSeries.OneNinerTwo;
-            List<ComputingNode> res = _computingNodeDiscoverer.GetAllComputingNodes(_handshake, _addressGenerator);
+            List<ComputingNode> res = _computingNodeDiscoverer.GetAllComputingNodes(_handshake, _addressGenerator, 1000);
             Assert.AreEqual(1, res.Count);
         }
 

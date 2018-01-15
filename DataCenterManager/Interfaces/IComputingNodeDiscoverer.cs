@@ -5,6 +5,6 @@ namespace DataCenterManager.Interfaces
 {
     public interface IComputingNodeDiscoverer
     {
-        List<ComputingNode> GetAllComputingNodes(IHandshake handshake, IIPAddressGenerator addressGenerator);
+        List<ComputingNode> GetAllComputingNodes(IHandshake handshake, IIPAddressGenerator addressGenerator, int timeout);
     }
 }
