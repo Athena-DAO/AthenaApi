@@ -29,9 +29,13 @@ namespace DataCenterManager.Test
         {
             _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneNinerTwo;
 
-            List<Data.IPAddress> IPAddress = new List<Data.IPAddress>(_ipAddressGenerator.GetIPAddresses());
+            int count = 0;
+            foreach(var ipAddress in _ipAddressGenerator.GetIPAddresses())
+            {
+                count++;
+            }
 
-            Assert.AreEqual(IPAddress.Count, 255 * 255);
+            Assert.AreEqual(65536, count);
         }
     }
 }
