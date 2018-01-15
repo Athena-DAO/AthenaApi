@@ -40,7 +40,15 @@ namespace DataCenterManager
 
         private static void PerformStageOne(IPEndPoint localEndPoint, Socket socket, out byte[] message, out int bytesSent)
         {
-            socket.Connect(localEndPoint);
+            try
+            {
+                socket.Connect(localEndPoint);
+            }
+            catch(SocketException)
+            {
+                throw new Exceptions.MachineNotAvailableException();
+            }
+
             message = Encoding.ASCII.GetBytes("Hello<EOF>");
             bytesSent = socket.Send(message);
         }

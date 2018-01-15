@@ -72,5 +72,18 @@ namespace DataCenterManager.Test
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exceptions.MachineNotAvailableException))]
+        public void TestUnavaiableClient()
+        {
+            _handshaker.PerformHandshake(new Data.IPAddress
+            {
+                FirstOctet = 127,
+                SecondOctet = 0,
+                ThridOctet = 0,
+                FourthOctet = 1
+            });
+        }
     }
 }
