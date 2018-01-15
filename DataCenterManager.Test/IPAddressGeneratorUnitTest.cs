@@ -23,5 +23,15 @@ namespace DataCenterManager.Test
 
             Assert.AreEqual(_ipAddressGenerator.IPAddressSeries, Data.IPAddressSeries.OneNinerTwo);
         }
+
+        [TestMethod]
+        public void TestIPAddressCountInOneNinerTwo()
+        {
+            _ipAddressGenerator.IPAddressSeries = Data.IPAddressSeries.OneNinerTwo;
+
+            List<Data.IPAddress> IPAddress = new List<Data.IPAddress>(_ipAddressGenerator.GetIPAddresses());
+
+            Assert.AreEqual(IPAddress.Count, 255 * 255);
+        }
     }
 }
