@@ -1,20 +1,26 @@
 ﻿using DataCenterManager.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 
 namespace DataCenterManager
 {
-    class SocketCommunicationFramework : ICommunicationFramework
+    public class SocketCommunicationFramework : ICommunicationFramework
     {
+        private Socket socket;
+
         public void Close()
         {
-            throw new NotImplementedException();
+            socket.Close();
         }
 
         public void Connect(string IPAddress, int port)
         {
-            throw new NotImplementedException();
+            IPAddress iPAddress = System.Net.IPAddress.Parse(IPAddress);
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, port);
+            socket = new Socket(iPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         }
 
         public string RecieveFile()

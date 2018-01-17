@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataCenterManager.Interfaces
 {
-    interface ICommunicationFramework
+    public interface ICommunicationFramework
     {
         void Connect(string IPAddress, int port);
         void SendMessage(string data);
