@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Interfaces\ICommunicationFramework.cs" />
     <Compile Remove="SocketCommunicationFramework.cs" />
   </ItemGroup>
 

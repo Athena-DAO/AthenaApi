@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataCenterManager.Interfaces
+﻿namespace DataCenterManager.Interfaces
 {
-    public interface ICommunicationFramework
+    interface ICommunicationFramework
     {
-        void Connect(string IPAddress, int port, int timeout);
-        void SendMessage(string data);
-        string RecieveMessage();
-        void SendFile(string fileLocation);
-        string RecieveFile();
-        void Close();
+        void SendParameters(string communicationParameters, string algorithmParameters, string loggingParameters, string IPAddress, int port);
+        string RecieveResults(string IPAddress, string port);
     }
 }
