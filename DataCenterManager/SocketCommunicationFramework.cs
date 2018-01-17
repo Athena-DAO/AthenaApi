@@ -9,15 +9,38 @@ namespace DataCenterManager
 {
     public class SocketCommunicationFramework : ICommunicationFramework
     {
-        public string RecieveResults(string IPAddress, string port)
+        public string RecieveResults(string IPAddress, int port)
         {
-            throw new NotImplementedException();
+            IPAddress iPAddress = System.Net.IPAddress.Parse(IPAddress);
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, port);
+            Socket socket = new Socket(iPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.Bind(localEndPoint);
+            socket.Listen(1);
+
+            Socket handler = socket.Accept();
+            byte[] bytes = new byte[255];
+            string data = null;
+            while (true)
+            {
+                int byteRecieved = handler.Receive(bytes);
+                data += Encoding.ASCII.GetString(bytes, 0, byteRecieved);
+                if (data.IndexOf("<EOF>") > -1)
+                {
+                    break;
+                }
+            }
+            data = data.Replace("<EOF>", "");
+
+            handler.Shutdown(SocketShutdown.Both);
+            handler.Close();
+
+            return data;
         }
 
         public void SendParameters(string communicationParameters, string algorithmParameters, string loggingParameters, string IPAddress, int port)
         {
-            IPAddress iPAddress = System.Net.IPAddress.Parse("127.0.0.1");
-            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, Constants.PortNumbers.PARAMETER_EXCHANGE_PORT);
+            IPAddress iPAddress = System.Net.IPAddress.Parse(IPAddress);
+            IPEndPoint localEndPoint = new IPEndPoint(iPAddress, port);
             Socket socket = new Socket(iPAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(localEndPoint);
 
