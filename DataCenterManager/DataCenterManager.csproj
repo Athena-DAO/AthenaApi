@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Interfaces\ICommunicationFramework.cs" />
+    <Compile Remove="SocketCommunicationFramework.cs" />
+  </ItemGroup>
+
 </Project>

@@ -6,7 +6,7 @@ namespace DataCenterManager.Interfaces
 {
     public interface ICommunicationFramework
     {
-        void Connect(string IPAddress, int port);
+        void Connect(string IPAddress, int port, int timeout);
         void SendMessage(string data);
         string RecieveMessage();
         void SendFile(string fileLocation);
