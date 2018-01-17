@@ -13,9 +13,9 @@ namespace DataCenterManager.Test
     [TestClass]
     public class SimpleComputingNodeDiscovererTest
     {
-        private IComputingNodeDiscoverer _computingNodeDiscoverer;
-        private IIPAddressGenerator _addressGenerator;
-        private IHandshake _handshake;
+        private SimpleComputingNodeDiscoverer _computingNodeDiscoverer;
+        private IPAddressGenerator _addressGenerator;
+        private SimpleHandshaker _handshake;
 
         public SimpleComputingNodeDiscovererTest()
         {

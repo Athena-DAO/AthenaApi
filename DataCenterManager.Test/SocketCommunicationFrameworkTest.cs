@@ -10,7 +10,7 @@ namespace DataCenterManager.Test
     [TestClass]
     public class SocketCommunicationFrameworkTest
     {
-        private ICommunicationFramework communicationFramework;
+        private SocketCommunicationFramework communicationFramework;
 
         public SocketCommunicationFrameworkTest()
         {
@@ -52,9 +52,7 @@ namespace DataCenterManager.Test
             Assert.AreEqual("loggingParameters", parameters[2]);
 
             handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            handler.Close();            
         }
 
         [TestMethod]

@@ -11,7 +11,7 @@ namespace DataCenterManager.Test
     [TestClass]
     public class SimpleHandshakerTest
     {
-        private IHandshake _handshaker;
+        private SimpleHandshaker _handshaker;
 
         public SimpleHandshakerTest()
         {

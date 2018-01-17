@@ -6,7 +6,7 @@ namespace DataCenterManager.Test
     [TestClass]
     public class IPAddressGeneratorUnitTest
     {
-        public readonly IIPAddressGenerator _ipAddressGenerator;
+        public readonly IPAddressGenerator _ipAddressGenerator;
 
         public IPAddressGeneratorUnitTest()
         {
