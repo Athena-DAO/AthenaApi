@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace CommandAndControlWebApi.Models
 {
-    public class Machine
+    public class Conatiner
     {
         public Guid Id { get; set; }
         public string IpAddress { get; set; }
-
+        public int PortNumber { get; set; }
     }
 }

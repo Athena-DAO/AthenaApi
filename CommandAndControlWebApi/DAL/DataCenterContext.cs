@@ -14,6 +14,6 @@ namespace CommandAndControlWebApi.DAL
         {
         }
 
-        public DbSet<Machine> Machines { get; set; }
+        public DbSet<Conatiner> Containers { get; set; }
     }
 }
