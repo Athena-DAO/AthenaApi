@@ -15,5 +15,6 @@ namespace CommandAndControlWebApi.DAL
         }
 
         public DbSet<Conatiner> Containers { get; set; }
+        public DbSet<Algorithm> Algorithms { get; set; }
     }
 }
