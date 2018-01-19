@@ -13,5 +13,7 @@ namespace CommandAndControlWebApi.Models
         public string SlaveExecutableFileLocation { get; set; }
 
         public virtual ICollection<ContainerExecutesAlgorithm> Executions { get; set; }
+
+        public virtual ICollection<Input> Inputs { get; set; }
     }
 }
