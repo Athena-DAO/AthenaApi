@@ -15,5 +15,6 @@ namespace CommandAndControlWebApi.Models
         public virtual ICollection<ContainerExecutesAlgorithm> Executions { get; set; }
 
         public virtual ICollection<Input> Inputs { get; set; }
+        public virtual ICollection<Output> Outputs { get; set; }
     }
 }
