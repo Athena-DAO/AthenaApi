@@ -10,5 +10,7 @@ namespace CommandAndControlWebApi.Models
         public Guid Id { get; set; }
         public string IpAddress { get; set; }
         public int PortNumber { get; set; }
+
+        public virtual ICollection<ContainerExecutesAlgorithm> Executions { get; set; }
     }
 }
