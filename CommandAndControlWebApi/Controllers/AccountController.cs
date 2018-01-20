@@ -38,7 +38,7 @@ namespace CommandAndControlWebApi.Controllers
             if(result.Succeeded)
             {
                 var appUser = userManager.Users.SingleOrDefault(x => x.Email == login.UserName);
-                return await GenerateJwtToken(login.UserName, appUser);
+                return GenerateJwtToken(login.UserName, appUser);
             }
 
             throw new ApplicationException("Error");
@@ -58,13 +58,13 @@ namespace CommandAndControlWebApi.Controllers
             if(result.Succeeded)
             {
                 await signInManager.SignInAsync(user, false);
-                return await GenerateJwtToken(register.Email, user);
+                return GenerateJwtToken(register.Email, user);
             }
 
             throw new ApplicationException("Error");
         }
 
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        private string GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
             {
@@ -78,11 +78,11 @@ namespace CommandAndControlWebApi.Controllers
             var expires = DateTime.Now.AddDays(Convert.ToDouble(configuration["JwtExpireDays"]));
 
             var token = new JwtSecurityToken(
-                configuration["JwtIssuer"],
-                configuration["JetIssuer"],
-                claims,
+                issuer: configuration["JwtIssuer"],
+                audience: configuration["JwtAudience"],
+                claims: claims,
                 expires: expires,
-                signingCredentials: cred
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
