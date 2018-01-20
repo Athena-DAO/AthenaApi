@@ -31,6 +31,20 @@ namespace CommandAndControlWebApi.Controllers
         }
 
         [HttpPost]
+        public async Task<object> Login([FromBody]LoginViewModel login)
+        {
+            var result = await signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
+
+            if(result.Succeeded)
+            {
+                var appUser = userManager.Users.SingleOrDefault(x => x.Email == login.UserName);
+                return await GenerateJwtToken(login.UserName, appUser);
+            }
+
+            throw new ApplicationException("Error");
+        }
+
+        [HttpPost]
         public async Task<object> Register([FromBody]RegistrationViewModel register)
         {
             var user = new IdentityUser
