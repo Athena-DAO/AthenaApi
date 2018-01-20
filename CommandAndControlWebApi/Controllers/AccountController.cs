@@ -39,31 +39,47 @@ namespace CommandAndControlWebApi.Controllers
             {
                 var appUser = userManager.Users.SingleOrDefault(x => x.Email == login.UserName);
                 var role = await userManager.GetRolesAsync(appUser);
-                return GenerateJwtToken(login.UserName, appUser, role[0]);
+                return Ok(new
+                {
+                    token = GenerateJwtToken(login.UserName, appUser, role[0])
+                }); 
             }
 
-            throw new ApplicationException("Error");
+            return BadRequest("User name or password incorrect");
         }
 
         [HttpPost]
         public async Task<object> Register([FromBody]RegistrationViewModel register)
         {
-            var user = new IdentityUser
+            if (ModelState.IsValid)
             {
-                UserName = register.Email,
-                Email = register.Email,
-                PhoneNumber = register.PhoneNumber
-            };
+                var user = new IdentityUser
+                {
+                    UserName = register.Email,
+                    Email = register.Email,
+                    PhoneNumber = register.PhoneNumber
+                };
 
-            var result = await userManager.CreateAsync(user, register.Password);
-            if(result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, "User");
-                await signInManager.SignInAsync(user, false);
-                return GenerateJwtToken(register.Email, user, "User");
+                var result = await userManager.CreateAsync(user, register.Password);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "User");
+                    await signInManager.SignInAsync(user, false);
+                    return Ok(new
+                    {
+                        token = GenerateJwtToken(register.Email, user, "User")
+                    });
+                }
+                else
+                {
+                    foreach(var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
             }
 
-            throw new ApplicationException("Error");
+            return BadRequest(ModelState);
         }
 
         private string GenerateJwtToken(string email, IdentityUser user, string role)
