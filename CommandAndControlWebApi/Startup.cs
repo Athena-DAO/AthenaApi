@@ -30,7 +30,7 @@ namespace CommandAndControlWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataCenterContext>(options => 
+            services.AddDbContext<DataCenterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -41,6 +41,12 @@ namespace CommandAndControlWebApi
                 .AddDefaultTokenProviders();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
+            });
 
             services.AddAuthentication(options =>
             {
@@ -72,6 +78,38 @@ namespace CommandAndControlWebApi
 
             app.UseAuthentication();
             app.UseMvc();
+            AddRoles(app.ApplicationServices).Wait();
+
+        }
+
+
+        private async Task AddRoles(IServiceProvider serviceProvider)
+        {
+            IServiceScopeFactory serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+
+            using (IServiceScope scope = serviceScopeFactory.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (!await roleManager.RoleExistsAsync("User"))
+                {
+                    await roleManager.CreateAsync(new IdentityRole("User"));
+                }
+
+                if (!await roleManager.RoleExistsAsync("Admin"))
+                {
+                    await roleManager.CreateAsync(new IdentityRole("Admin"));
+                }
+
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var user = await userManager.FindByEmailAsync("admin@athena.com");
+                if (user == null)
+                {
+                    user = new IdentityUser { Email = "admin@athena.com", UserName = "admin@athena.com" };
+                    await userManager.CreateAsync(user, "P@ssw0rd");
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
         }
     }
 }

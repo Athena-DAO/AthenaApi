@@ -38,7 +38,8 @@ namespace CommandAndControlWebApi.Controllers
             if(result.Succeeded)
             {
                 var appUser = userManager.Users.SingleOrDefault(x => x.Email == login.UserName);
-                return GenerateJwtToken(login.UserName, appUser);
+                var role = await userManager.GetRolesAsync(appUser);
+                return GenerateJwtToken(login.UserName, appUser, role[0]);
             }
 
             throw new ApplicationException("Error");
@@ -57,20 +58,22 @@ namespace CommandAndControlWebApi.Controllers
             var result = await userManager.CreateAsync(user, register.Password);
             if(result.Succeeded)
             {
+                await userManager.AddToRoleAsync(user, "User");
                 await signInManager.SignInAsync(user, false);
-                return GenerateJwtToken(register.Email, user);
+                return GenerateJwtToken(register.Email, user, "User");
             }
 
             throw new ApplicationException("Error");
         }
 
-        private string GenerateJwtToken(string email, IdentityUser user)
+        private string GenerateJwtToken(string email, IdentityUser user, string role)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]));
