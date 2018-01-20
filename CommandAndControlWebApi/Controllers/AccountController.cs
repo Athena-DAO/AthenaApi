@@ -82,6 +82,13 @@ namespace CommandAndControlWebApi.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            await signInManager.SignOutAsync();
+            return Ok();
+        }
+
         private string GenerateJwtToken(string email, IdentityUser user, string role)
         {
             var claims = new List<Claim>
