@@ -14,6 +14,7 @@ using CommandAndControlWebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Cors;
 
 namespace CommandAndControlWebApi.Controllers
 {

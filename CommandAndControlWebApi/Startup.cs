@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace CommandAndControlWebApi
 {
@@ -91,10 +92,10 @@ namespace CommandAndControlWebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
-                builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
-            );
             app.UseAuthentication();
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+            );
             app.UseMvc();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
