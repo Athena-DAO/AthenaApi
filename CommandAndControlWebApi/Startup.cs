@@ -67,7 +67,7 @@ namespace CommandAndControlWebApi
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
-                cfg.SaveToken = true;
+                cfg.SaveToken = false;
                 cfg.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = Configuration["JwtIssuer"],
