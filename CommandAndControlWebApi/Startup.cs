@@ -15,6 +15,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CommandAndControlWebApi
 {
@@ -94,8 +96,13 @@ namespace CommandAndControlWebApi
             );
             app.UseAuthentication();
             app.UseMvc();
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "DataSets")),
+                RequestPath = "/DataSets"
+            });
             AddRoles(app.ApplicationServices).Wait();
-
         }
 
 
