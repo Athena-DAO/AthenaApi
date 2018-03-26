@@ -4,10 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CommandAndControlWebApi.ViewModels
+namespace CommandAndControlWebApi.Models
 {
-    public class RegistrationViewModel
+    public class Profile
     {
+        public Guid Id { get; set; }
+
         [Required]
         public string FirstName { get; set; }
 
@@ -15,11 +17,12 @@ namespace CommandAndControlWebApi.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public string ProfilePicture { get; set; }
+
+        [Required]
+        public string CoverPicture { get; set; }
     }
 }

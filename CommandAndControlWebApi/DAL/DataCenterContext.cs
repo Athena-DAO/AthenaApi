@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommandAndControlWebApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommandAndControlWebApi.DAL
 {
@@ -7,5 +8,7 @@ namespace CommandAndControlWebApi.DAL
         public DataCenterContext(DbContextOptions<DataCenterContext> options) : base(options)
         {
         }
+
+        public DbSet<Profile> Profiles { get; set; }
     }
 }

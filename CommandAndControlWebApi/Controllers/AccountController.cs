@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CommandAndControlWebApi.ViewModels;
+using CommandAndControlWebApi.DAL;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -21,13 +22,16 @@ namespace CommandAndControlWebApi.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly DataCenterContext dataCenterContext;
 
         public AccountController(SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userManager, IConfiguration configuration)
+            UserManager<IdentityUser> userManager, IConfiguration configuration, 
+            DataCenterContext dataCenterContext)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.configuration = configuration;
+            this.dataCenterContext = dataCenterContext;
         }
 
         [HttpPost]
@@ -56,19 +60,24 @@ namespace CommandAndControlWebApi.Controllers
                 var user = new IdentityUser
                 {
                     UserName = register.Email,
-                    Email = register.Email,
-                    PhoneNumber = register.PhoneNumber
+                    Email = register.Email
                 };
 
                 var result = await userManager.CreateAsync(user, register.Password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "User");
-                    await signInManager.SignInAsync(user, false);
-                    return Ok(new
+                    user = await userManager.FindByEmailAsync(register.Email);
+                    dataCenterContext.Profiles.Add(new Models.Profile
                     {
-                        token = GenerateJwtToken(register.Email, user, "User")
+                        FirstName = register.FirstName,
+                        LastName = register.LastName,
+                        Email = register.Email,
+                        Id = Guid.Parse(user.Id),
+                        CoverPicture = "URL",
+                        ProfilePicture = "URL"
                     });
+                    dataCenterContext.SaveChanges();
+                    return Ok();
                 }
                 else
                 {
