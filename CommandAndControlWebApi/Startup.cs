@@ -77,6 +77,7 @@ namespace CommandAndControlWebApi
                 };
             });
 
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -88,6 +89,9 @@ namespace CommandAndControlWebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder =>
+                builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+            );
             app.UseAuthentication();
             app.UseMvc();
             AddRoles(app.ApplicationServices).Wait();

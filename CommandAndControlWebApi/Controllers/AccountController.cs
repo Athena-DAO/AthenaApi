@@ -83,6 +83,24 @@ namespace CommandAndControlWebApi.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> IsEmailAvailable([FromBody]IsEmailAvailableViewModel viewModel)
+        {
+            IdentityUser user = await userManager.FindByEmailAsync(viewModel.Email);
+
+            if(user == null)
+            {
+                return Ok(new
+                {
+                    EmailAvailable = true
+                });
+            }
+            return Ok(new
+            {
+                EmailAvailable = false
+            });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> LogoutAsync()
         {
             await signInManager.SignOutAsync();
