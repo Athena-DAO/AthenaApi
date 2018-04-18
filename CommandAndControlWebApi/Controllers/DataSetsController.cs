@@ -15,19 +15,33 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Cors;
+using CommandAndControlWebApi.Models;
+using CommandAndControlWebApi.DAL;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CommandAndControlWebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/DataSets")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "User")]
     public class DataSetsController : Controller
     {
         private static readonly FormOptions defaultFormOptions = new FormOptions();
+        private readonly DataCenterContext dataCenterContext;
+        private readonly UserManager<IdentityUser> userManager;
+
+        public DataSetsController(DataCenterContext dataCenterContext, UserManager<IdentityUser> userManager)
+        {
+            this.dataCenterContext = dataCenterContext;
+            this.userManager = userManager;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post()
         {
-            if(!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
                 return BadRequest("Did not get multipart data");
             }
@@ -42,18 +56,18 @@ namespace CommandAndControlWebApi.Controllers
             var reader = new MultipartReader(boundry, HttpContext.Request.Body);
 
             var section = await reader.ReadNextSectionAsync();
-            while(section != null)
+            while (section != null)
             {
                 ContentDispositionHeaderValue contentDisposition;
                 var hasContentDisposition = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
 
-                if(hasContentDisposition)
+                if (hasContentDisposition)
                 {
-                    if(MultipartRequestHelper.HasFileContentDispostion(contentDisposition))
+                    if (MultipartRequestHelper.HasFileContentDispostion(contentDisposition))
                     {
                         fileExtension = Path.GetExtension(HeaderUtilities.RemoveQuotes(contentDisposition.FileName) + "").Trim();
                         targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "DataSets", fileName) + fileExtension;
-                        using(var targetStream = System.IO.File.Create(targetFilePath))
+                        using (var targetStream = System.IO.File.Create(targetFilePath))
                         {
                             await section.Body.CopyToAsync(targetStream);
                         }
@@ -92,16 +106,34 @@ namespace CommandAndControlWebApi.Controllers
                 new FormCollection(formAccumulator.GetResults()),
                 CultureInfo.CurrentCulture);
             var bindingSuccessful = await TryUpdateModelAsync(dataSet, prefix: "", valueProvider: formValueProvider);
-
-            if(!bindingSuccessful)
+            if (bindingSuccessful)
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
+                else
+                {
+                    var _id = Guid.Parse(userManager.GetUserId(User));
+                    Profile profile = dataCenterContext.Profiles.Where(x => x.Id == _id).First();
+                    DataSet myDataSet = new DataSet
+                    {
+                        Id = Guid.Parse(fileName),
+                        Name = dataSet.Name,
+                        Description = dataSet.Description,
+                        URL = "/DataSets/" + fileName + fileExtension
+                    };
+                    ProfileDataSet profileDataSet = new ProfileDataSet
+                    {
+                        DataSet = myDataSet,
+                        Profile = profile
+                    };
+                    dataCenterContext.Add(profileDataSet);
+                    dataCenterContext.SaveChanges();
+                }
             }
 
-            return Ok("/DataSets/"+fileName+fileExtension);
+            return Ok("/DataSets/" + fileName + fileExtension);
         }
 
 

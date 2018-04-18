@@ -77,6 +77,7 @@ namespace CommandAndControlWebApi.Controllers
                         ProfilePicture = "URL"
                     });
                     dataCenterContext.SaveChanges();
+                    await userManager.AddToRoleAsync(user, "User");
                     return Ok();
                 }
                 else
