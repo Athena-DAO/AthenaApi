@@ -38,6 +38,22 @@ namespace CommandAndControlWebApi.Controllers
             this.userManager = userManager;
         }
 
+        [HttpGet]
+        public IEnumerable<DataSetViewModel> Get()
+        {
+            var _id = Guid.Parse(userManager.GetUserId(User));
+            var profileId = dataCenterContext.Profiles.Where(x => x.Id == _id).First().Id;
+            List<DataSetViewModel> datasets = dataCenterContext.DataSets
+                .Where(x => x.DataSetProfiles.Where(y => y.ProfileId == profileId).Count() > 0)
+                .Select(x => new DataSetViewModel
+                {
+                    Id = x.Id.ToString(),
+                    Name = x.Name,
+                    Description = x.Description
+                }).ToList();
+            return datasets;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post()
         {
