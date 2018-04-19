@@ -11,9 +11,10 @@ using System;
 namespace CommandAndControlWebApi.Migrations
 {
     [DbContext(typeof(DataCenterContext))]
-    partial class DataCenterContextModelSnapshot : ModelSnapshot
+    [Migration("20180419122550_AddedAlgorithmv2")]
+    partial class AddedAlgorithmv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
