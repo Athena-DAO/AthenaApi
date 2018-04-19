@@ -26,5 +26,7 @@ namespace CommandAndControlWebApi.Models
         public string CoverPicture { get; set; }
 
         public ICollection<ProfileDataSet> ProfileDataSets { get; set; }
+
+        public ICollection<ProfileCompleteDataSet> ProfileCompleteDataSet { get; set; }
     }
 }
