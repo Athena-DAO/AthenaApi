@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CommandAndControlWebApi.ViewModels;
+using CommandAndControlWebApi.DAL;
+using CommandAndControlWebApi.Models;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -11,15 +14,28 @@ namespace CommandAndControlWebApi.Controllers
     [Route("api/Algorithm")]
     public class AlgorithmController : Controller
     {
+        private DataCenterContext dataCenterContext;
+
+        public AlgorithmController(DataCenterContext dataCenterContext)
+        {
+            this.dataCenterContext = dataCenterContext;
+        }
+
         // GET: api/Algorithm
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<AlgorithmViewModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            return dataCenterContext.Algorithms.Select(x => new AlgorithmViewModel
+            {
+                Id = x.Id.ToString(),
+                Name = x.Name,
+                Description = x.Description,
+                Cover = x.Cover
+            }).ToList() ;
         }
 
         // GET: api/Algorithm/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetAlgorithm")]
         public string Get(int id)
         {
             return "value";
@@ -27,8 +43,19 @@ namespace CommandAndControlWebApi.Controllers
         
         // POST: api/Algorithm
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]AlgorithmViewModel value)
         {
+            dataCenterContext.Algorithms.Add(new Algorithm
+            {
+                Id = Guid.NewGuid(),
+                Cover = value.Cover,
+                Description = value.Description,
+                MasterImage = value.Master,
+                SlaveImage = value.Slave,
+                Name = value.Name
+            });
+            dataCenterContext.SaveChanges();
+            return Ok();
         }
         
         // PUT: api/Algorithm/5
