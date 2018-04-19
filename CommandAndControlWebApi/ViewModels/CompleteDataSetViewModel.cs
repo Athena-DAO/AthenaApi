@@ -12,5 +12,7 @@ namespace CommandAndControlWebApi.ViewModels
         public string Description { get; set; }
         public string XComponentId { get; set; }
         public string YComponentId { get; set; }
+        public string XComponentName { get; set; }
+        public string YComponentName { get; set; }
     }
 }
