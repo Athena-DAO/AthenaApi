@@ -32,7 +32,8 @@ namespace CommandAndControlWebApi.Controllers
         [HttpGet("{id}", Name = "GetAlgorithmParameters")]
         public IEnumerable<AlgorithmParameterViewModel> Get(string id)
         {
-            return dataCenterContext.Algorithms.Find(Guid.Parse(id)).AlgorithmParameters
+            var _id = Guid.Parse(id);
+            return dataCenterContext.AlgorithmParameters.Where(x => x.Algorithm.Id == _id)
                 .Select(x => new AlgorithmParameterViewModel
                 {
                     Algorithm = x.Algorithm.Id.ToString(),

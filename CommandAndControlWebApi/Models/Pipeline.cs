@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommandAndControlWebApi.Models
 {
-    public class AlgorithmParameters
+    public class Pipeline
     {
         [Required]
         public Guid Id { get; set; }
@@ -16,9 +16,6 @@ namespace CommandAndControlWebApi.Models
 
         [Required]
         public string Description { get; set; }
-
-        [Required]
-        public string DataType { get; set; }
 
         public Algorithm Algorithm { get; set; }
 

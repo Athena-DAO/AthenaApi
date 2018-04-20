@@ -22,5 +22,7 @@ namespace CommandAndControlWebApi.DAL
         public DbSet<ProfileCompleteDataSet> ProfilesCompleteDataSets { get; set; }
         public DbSet<Algorithm> Algorithms { get; set; }
         public DbSet<AlgorithmParameters> AlgorithmParameters { get; set; }
+        public DbSet<Pipeline> Pipelines { get; set; }
+        public DbSet<PipelineParameter> PipelineParameters { get; set; }
     }
 }

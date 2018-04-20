@@ -28,5 +28,7 @@ namespace CommandAndControlWebApi.Models
         public string SlaveImage { get; set; }
 
         public ICollection<AlgorithmParameters> AlgorithmParameters { get; set; }
+
+        public ICollection<Pipeline> Pipelines { get; set; }
     }
 }
