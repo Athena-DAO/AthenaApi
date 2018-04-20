@@ -18,6 +18,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http.Features;
+using CommandAndControlWebApi.Hubs;
 
 namespace CommandAndControlWebApi
 {
@@ -82,6 +83,7 @@ namespace CommandAndControlWebApi
 
             services.AddCors();
             services.AddMvc();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +99,10 @@ namespace CommandAndControlWebApi
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()
             );
             app.UseMvc();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<LogHub>("/loghub");
+            });
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
