@@ -42,7 +42,7 @@ namespace CommandAndControlWebApi.Controllers
                     AlgorithmDescription = x.Pipeline.Algorithm.Description,
                     Description = x.Pipeline.Description,
                     Name = x.Pipeline.Name,
-                    NumberOfContainers = 0,
+                    NumberOfContainers = x.Pipeline.NumberOfContainers,
                     Parameters = x.Pipeline.PipelineParameters.Select(y => new PipelineParameterViewModel
                     {
                         ParameterName = y.AlgorithmParameter.Name,
@@ -71,7 +71,8 @@ namespace CommandAndControlWebApi.Controllers
                 Algorithm = algorithm,
                 Id = Guid.NewGuid(),
                 Name = value.Name,
-                Description = value.Description
+                Description = value.Description,
+                NumberOfContainers = value.NumberOfContainers
             };
             List<PipelineParameter> parameters = new List<PipelineParameter>();
             foreach (var parameter in value.Parameters)
