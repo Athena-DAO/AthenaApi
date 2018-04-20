@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CommandAndControlWebApi.ViewModels;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -19,7 +20,7 @@ namespace CommandAndControlWebApi.Controllers
         }
 
         // GET: api/Pipeline/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetPipeline")]
         public string Get(int id)
         {
             return "value";
@@ -27,8 +28,9 @@ namespace CommandAndControlWebApi.Controllers
         
         // POST: api/Pipeline
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]PipelineViewModel value)
         {
+            return Ok();
         }
         
         // PUT: api/Pipeline/5
