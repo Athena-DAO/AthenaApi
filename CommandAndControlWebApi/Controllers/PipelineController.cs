@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CommandAndControlWebApi.ViewModels;
+using CommandAndControlWebApi.DAL;
+using Microsoft.AspNetCore.Identity;
+using CommandAndControlWebApi.Models;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -12,6 +15,15 @@ namespace CommandAndControlWebApi.Controllers
     [Route("api/Pipeline")]
     public class PipelineController : Controller
     {
+        private readonly DataCenterContext dataCenterContext;
+        private readonly UserManager<IdentityUser> userManager;
+
+        public PipelineController(DataCenterContext dataCenterContext, UserManager<IdentityUser> userManager)
+        {
+            this.dataCenterContext = dataCenterContext;
+            this.userManager = userManager;
+        }
+
         // GET: api/Pipeline
         [HttpGet]
         public IEnumerable<string> Get()
@@ -30,6 +42,36 @@ namespace CommandAndControlWebApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]PipelineViewModel value)
         {
+            var _id = Guid.Parse(userManager.GetUserId(User));
+            Profile profile = dataCenterContext.Profiles.Where(x => x.Id == _id).First();
+            Algorithm algorithm = dataCenterContext.Algorithms.Find(Guid.Parse(value.AlgorithmId));
+            Pipeline pipeline = new Pipeline
+            {
+                Algorithm = algorithm,
+                Id = Guid.NewGuid(),
+                Name = value.Name,
+                Description = value.Description
+            };
+            List<PipelineParameter> parameters = new List<PipelineParameter>();
+            foreach(var parameter in value.Parameters)
+            {
+                AlgorithmParameters algorithmParameter = dataCenterContext.AlgorithmParameters.Find(Guid.Parse(parameter.Id));
+                parameters.Add(new PipelineParameter
+                {
+                    Id = Guid.NewGuid(),
+                    Pipeline = pipeline,
+                    Value = parameter.Value,
+                    AlgorithmParameter = algorithmParameter
+                });
+            }
+            pipeline.PipelineParameters = parameters;
+            ProfilePipeline profilePipeline = new ProfilePipeline
+            {
+                Pipeline = pipeline,
+                Profile = profile
+            };
+            dataCenterContext.ProfilePipeline.Add(profilePipeline);
+            dataCenterContext.SaveChanges();
             return Ok();
         }
         

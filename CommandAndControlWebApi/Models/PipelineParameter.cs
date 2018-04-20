@@ -9,7 +9,7 @@ namespace CommandAndControlWebApi.Models
     public class PipelineParameter
     {
         [Required]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Value { get; set; }
