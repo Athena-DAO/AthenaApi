@@ -17,6 +17,9 @@ namespace CommandAndControlWebApi.Models
         [Required]
         public string Description { get; set; }
 
+        [Required]
+        public int NumberOfContainers { get; set; }
+
         public Algorithm Algorithm { get; set; }
 
         public ICollection<PipelineParameter> PipelineParameters { get; set; }
