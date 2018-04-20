@@ -10,6 +10,6 @@ namespace CommandAndControlWebApi.ViewModels
         public string AlgorithmId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<PipelineParameter> Parameters { get; set; }
+        public ICollection<PipelineParameterViewModel> Parameters { get; set; }
     }
 }

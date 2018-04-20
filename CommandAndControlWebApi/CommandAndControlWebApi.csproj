@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ViewModels\PipelineParameterViewModel.cs" />
+    <Compile Include="ViewModels\PipelineViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\images\" />
