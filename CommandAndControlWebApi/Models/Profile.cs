@@ -28,5 +28,7 @@ namespace CommandAndControlWebApi.Models
         public ICollection<ProfileDataSet> ProfileDataSets { get; set; }
 
         public ICollection<ProfileCompleteDataSet> ProfileCompleteDataSet { get; set; }
+
+        public ICollection<ProfilePipeline> ProfilePipeline { get; set; }
     }
 }

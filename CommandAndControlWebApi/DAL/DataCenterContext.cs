@@ -13,6 +13,7 @@ namespace CommandAndControlWebApi.DAL
         {
             modelBuilder.Entity<ProfileDataSet>().HasKey(pk => new { pk.DataSetId, pk.ProfileId });
             modelBuilder.Entity<ProfileCompleteDataSet>().HasKey(pk => new { pk.CompleteDataSetId, pk.ProfileId });
+            modelBuilder.Entity<ProfilePipeline>().HasKey(pk => new { pk.PipelineId, pk.ProfileId });
         }
 
         public DbSet<Profile> Profiles { get; set; }
@@ -24,5 +25,6 @@ namespace CommandAndControlWebApi.DAL
         public DbSet<AlgorithmParameters> AlgorithmParameters { get; set; }
         public DbSet<Pipeline> Pipelines { get; set; }
         public DbSet<PipelineParameter> PipelineParameters { get; set; }
+        public DbSet<ProfilePipeline> ProfilePipeline { get; set; }
     }
 }
