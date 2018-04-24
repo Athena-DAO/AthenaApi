@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using CommandAndControlWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CommandAndControlWebApi.Services;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -95,7 +96,12 @@ namespace CommandAndControlWebApi.Controllers
             dataCenterContext.ProfilePipeline.Add(profilePipeline);
             dataCenterContext.SaveChanges();
 
-            // TODO: post to RabbitMQ
+            RabbitMqService rabbitMqService = new RabbitMqService();
+            rabbitMqService.SendMessage(pipeline.Id+"~master");
+            for(int i = 0; i < pipeline.NumberOfContainers - 1; i++)
+            {
+                rabbitMqService.SendMessage(pipeline.Id + "~slave");
+            }
 
             return Ok();
         }
