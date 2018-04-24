@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CommandAndControlWebApi.ViewModels;
 using System.IO;
+using Microsoft.AspNetCore.SignalR;
+using CommandAndControlWebApi.Hubs;
+using CommandAndControlWebApi.Services;
 
 namespace CommandAndControlWebApi.Controllers
 {
@@ -13,6 +16,13 @@ namespace CommandAndControlWebApi.Controllers
     [Route("api/Logging")]
     public class LoggingController : Controller
     {
+        private IHubContext<LogHub> hubContext;
+
+        public LoggingController(IHubContext<LogHub> hubContext)
+        {
+            this.hubContext = hubContext;
+        }
+
         // GET: api/Logging
         [HttpGet]
         public IEnumerable<string> Get()
@@ -26,22 +36,27 @@ namespace CommandAndControlWebApi.Controllers
         {
             return "value";
         }
-        
+
         // POST: api/Logging
         [HttpPost]
-        public IActionResult Post([FromBody]PipelineLogViewModel value)
+        public async Task<IActionResult> Post([FromBody]PipelineLogViewModel value)
         {
             string targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Logs", value.PipelineId) + ".txt";
             System.IO.File.AppendAllText(targetFilePath, value.Log);
+            string connectionId = LoggingService.GetUser(value.PipelineId);
+            if (connectionId != null)
+            {
+                await hubContext.Clients.Client(connectionId).SendAsync("Log", value.Log);
+            }
             return Ok();
         }
-        
+
         // PUT: api/Logging/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
