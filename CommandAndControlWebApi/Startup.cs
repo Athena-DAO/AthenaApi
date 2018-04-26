@@ -19,6 +19,8 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http.Features;
 using CommandAndControlWebApi.Hubs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace CommandAndControlWebApi
 {
@@ -39,6 +41,12 @@ namespace CommandAndControlWebApi
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            });
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -81,8 +89,11 @@ namespace CommandAndControlWebApi
                 };
             });
 
-            services.AddCors();
             services.AddMvc();
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
+            });
             services.AddSignalR();
         }
 
@@ -94,20 +105,20 @@ namespace CommandAndControlWebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication();
-            app.UseCors(builder =>
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-            );
-            app.UseMvc();
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<LogHub>("/loghub");
-            });
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "DataSets")),
                 RequestPath = "/DataSets"
+            });
+
+
+            app.UseCors("AllowSpecificOrigin");
+            app.UseAuthentication();
+            app.UseMvc();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<LogHub>("/loghub");
             });
             AddRoles(app.ApplicationServices).Wait();
         }

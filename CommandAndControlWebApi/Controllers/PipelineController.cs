@@ -44,6 +44,7 @@ namespace CommandAndControlWebApi.Controllers
                     Description = x.Pipeline.Description,
                     Name = x.Pipeline.Name,
                     NumberOfContainers = x.Pipeline.NumberOfContainers,
+                    Result = x.Pipeline.Result,
                     Parameters = x.Pipeline.PipelineParameters.Select(y => new PipelineParameterViewModel
                     {
                         ParameterName = y.AlgorithmParameter.Name,
@@ -55,9 +56,29 @@ namespace CommandAndControlWebApi.Controllers
 
         // GET: api/Pipeline/5
         [HttpGet("{id}", Name = "GetPipeline")]
-        public string Get(int id)
+        public PipelineViewModel Get(string id)
         {
-            return "value";
+            var _id = Guid.Parse(userManager.GetUserId(User));
+            var _id1 = Guid.Parse(id);
+            return dataCenterContext.ProfilePipeline
+                .Where(x => x.ProfileId == _id && x.PipelineId == _id1)
+                .Select(x => new PipelineViewModel
+                {
+                    Id = x.PipelineId.ToString(),
+                    AlgorithmId = x.Pipeline.Id.ToString(),
+                    AlgorithmName = x.Pipeline.Algorithm.Name,
+                    AlgorithmDescription = x.Pipeline.Algorithm.Description,
+                    Description = x.Pipeline.Description,
+                    Name = x.Pipeline.Name,
+                    NumberOfContainers = x.Pipeline.NumberOfContainers,
+                    Result = x.Pipeline.Result,
+                    Parameters = x.Pipeline.PipelineParameters.Select(y => new PipelineParameterViewModel
+                    {
+                        ParameterName = y.AlgorithmParameter.Name,
+                        ParameterDescription = y.AlgorithmParameter.Description,
+                        Value = y.Value
+                    }).ToList()
+                }).First();
         }
 
         // POST: api/Pipeline
@@ -116,6 +137,17 @@ namespace CommandAndControlWebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost]
+        [Route("Result")]
+        public IActionResult UpdateResult([FromBody]PipelineResultViewModel pipelineResultViewModel)
+        {
+            Pipeline pipeline = dataCenterContext.Pipelines.Find(Guid.Parse(pipelineResultViewModel.PipelineId));
+            pipeline.Result = pipelineResultViewModel.Result;
+            dataCenterContext.Entry(pipeline).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            dataCenterContext.SaveChanges();
+            return Ok();
         }
     }
 }

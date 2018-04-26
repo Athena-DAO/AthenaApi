@@ -14,6 +14,7 @@ namespace CommandAndControlWebApi.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public int NumberOfContainers { get; set; }
+        public string Result { get; set; }
         public ICollection<PipelineParameterViewModel> Parameters { get; set; }
     }
 }
