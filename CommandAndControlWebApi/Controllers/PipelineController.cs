@@ -45,6 +45,7 @@ namespace CommandAndControlWebApi.Controllers
                     Name = x.Pipeline.Name,
                     NumberOfContainers = x.Pipeline.NumberOfContainers,
                     Result = x.Pipeline.Result,
+                    DataSetId = x.Pipeline.GetCompleteDataSet.Id.ToString(),
                     Parameters = x.Pipeline.PipelineParameters.Select(y => new PipelineParameterViewModel
                     {
                         ParameterName = y.AlgorithmParameter.Name,
@@ -72,6 +73,7 @@ namespace CommandAndControlWebApi.Controllers
                     Name = x.Pipeline.Name,
                     NumberOfContainers = x.Pipeline.NumberOfContainers,
                     Result = x.Pipeline.Result,
+                    DataSetId = x.Pipeline.GetCompleteDataSet.Id.ToString(),
                     Parameters = x.Pipeline.PipelineParameters.Select(y => new PipelineParameterViewModel
                     {
                         ParameterName = y.AlgorithmParameter.Name,
@@ -88,13 +90,15 @@ namespace CommandAndControlWebApi.Controllers
             var _id = Guid.Parse(userManager.GetUserId(User));
             Profile profile = dataCenterContext.Profiles.Where(x => x.Id == _id).First();
             Algorithm algorithm = dataCenterContext.Algorithms.Find(Guid.Parse(value.AlgorithmId));
+            CompleteDataSet completeDataSet = dataCenterContext.CompleteDataSets.Find(Guid.Parse(value.DataSetId));
             Pipeline pipeline = new Pipeline
             {
                 Algorithm = algorithm,
                 Id = Guid.NewGuid(),
                 Name = value.Name,
                 Description = value.Description,
-                NumberOfContainers = value.NumberOfContainers
+                NumberOfContainers = value.NumberOfContainers,
+                GetCompleteDataSet = completeDataSet
             };
             List<PipelineParameter> parameters = new List<PipelineParameter>();
             foreach (var parameter in value.Parameters)

@@ -46,10 +46,22 @@ namespace CommandAndControlWebApi.Controllers
         }
 
         // GET: api/CompleteDataSets/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetDataSet")]
+        public CompleteDataSetViewModel Get(string id)
         {
-            return "value";
+            var _id = Guid.Parse(userManager.GetUserId(User));
+            var _datasetId = Guid.Parse(id);
+            return dataCenterContext.ProfilesCompleteDataSets.Where(x => x.ProfileId == _id && x.CompleteDataSetId == _datasetId)
+                .Select(x => new CompleteDataSetViewModel
+                {
+                    Description = x.CompleteDataSet.Description,
+                    Id = x.CompleteDataSet.Id.ToString(),
+                    Name = x.CompleteDataSet.Name,
+                    XComponentId = x.CompleteDataSet.XComponentDataSet.Id.ToString(),
+                    YComponentId = x.CompleteDataSet.YComponentDataSet.Id.ToString(),
+                    XComponentName = x.CompleteDataSet.XComponentDataSet.Name,
+                    YComponentName = x.CompleteDataSet.YComponentDataSet.Name
+                }).First();
         }
 
         // POST: api/CompleteDataSets

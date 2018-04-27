@@ -22,6 +22,8 @@ namespace CommandAndControlWebApi.Models
 
         public DataSet YComponentDataSet { get; set; }
 
+        public ICollection<Pipeline> Pipelines { get; set; }
+
         public ICollection<ProfileCompleteDataSet> ProfileCompleteDataSet { get; set; }
     }
 }

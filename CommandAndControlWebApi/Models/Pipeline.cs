@@ -26,6 +26,8 @@ namespace CommandAndControlWebApi.Models
 
         public Algorithm Algorithm { get; set; }
 
+        public CompleteDataSet GetCompleteDataSet { get; set; }
+
         public ICollection<PipelineParameter> PipelineParameters { get; set; }
 
         public ICollection<ProfilePipeline> ProfilePipeline { get; set; }
