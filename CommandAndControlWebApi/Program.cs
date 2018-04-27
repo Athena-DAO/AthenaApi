@@ -21,7 +21,10 @@ namespace CommandAndControlWebApi
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
             .UseSetting("detailedErrors", "true")
-                .UseKestrel()
+                .UseKestrel(options =>
+                {
+                    options.Limits.MaxRequestBodySize = null;
+                })
             .CaptureStartupErrors(true)
                 .Build();
     }

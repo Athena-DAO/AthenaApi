@@ -82,7 +82,7 @@ namespace CommandAndControlWebApi.Controllers
                     if (MultipartRequestHelper.HasFileContentDispostion(contentDisposition))
                     {
                         fileExtension = Path.GetExtension(HeaderUtilities.RemoveQuotes(contentDisposition.FileName) + "").Trim();
-                        targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "DataSets", fileName) + fileExtension;
+                        targetFilePath = Path.Combine("DataSets", fileName) + fileExtension;
                         using (var targetStream = System.IO.File.Create(targetFilePath))
                         {
                             await section.Body.CopyToAsync(targetStream);

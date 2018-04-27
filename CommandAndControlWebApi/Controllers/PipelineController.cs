@@ -118,10 +118,10 @@ namespace CommandAndControlWebApi.Controllers
             dataCenterContext.SaveChanges();
 
             RabbitMqService rabbitMqService = new RabbitMqService();
-            rabbitMqService.SendMessage(pipeline.Id+"~master");
-            for(int i = 0; i < pipeline.NumberOfContainers - 1; i++)
+            rabbitMqService.SendMessage(pipeline.Id + "~" + algorithm.MasterImage);
+            for (int i = 0; i < pipeline.NumberOfContainers - 1; i++)
             {
-                rabbitMqService.SendMessage(pipeline.Id + "~slave");
+                rabbitMqService.SendMessage(pipeline.Id + "~" + algorithm.SlaveImage);
             }
 
             return Ok();

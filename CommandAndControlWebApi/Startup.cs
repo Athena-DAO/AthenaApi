@@ -105,6 +105,9 @@ namespace CommandAndControlWebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
